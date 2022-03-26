@@ -1,5 +1,5 @@
 import classes from './ActiveQuiz.module.css'
-import AnswerList from './AnswerList/AnswerList'
+import AnswerList from '../AnswerList/AnswerList'
 
 const ActiveQuiz = props => {
     return (
