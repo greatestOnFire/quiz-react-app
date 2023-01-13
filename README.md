@@ -5,8 +5,7 @@ Quiz React | Квиз React
 # Stack | Стэк
 
 - React
-- React Router
 
 # Example | Пример
 
-[quiz]()
+[quiz](https://elaborate-naiad-a0c7af.netlify.app/)
