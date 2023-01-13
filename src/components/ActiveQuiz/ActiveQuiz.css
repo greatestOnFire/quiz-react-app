@@ -1,0 +1,19 @@
+.ActiveQuiz {
+    padding: 20px;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    margin: 0 10px;
+    box-sizing: border-box;
+}
+
+.Question {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width: 600px)  {
+    .Question {
+        font-size: 14px;
+    }
+}
