@@ -3,7 +3,7 @@ import classes from './QuizCreator.css';
 
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
-import { createControl } from '../../form/formFramework';
+import { createControl, validate, validateForm } from '../../form/formFramework';
 import Select from '../../components/UI/Select/Select'
 
 function createOptionControl(number) {
@@ -31,6 +31,7 @@ export default class QuizCreator extends Component {
 
   state = {
     quiz: [],
+    isFormValid: false,
     rightAnswerId: 1,
     formControls: createFormControls()
   }
@@ -39,16 +40,56 @@ export default class QuizCreator extends Component {
     event.preventDefault();
   }
 
-  addQuiestionHandler = () => {
+  addQuiestionHandler = (event) => {
+    event.preventDefault();
 
+    const QUIZ = [...this.state.quiz];
+    const INDEX = QUIZ.length + 1;
+
+    const {question, option1, option2, option3, option4} = this.state.formControls
+
+    const QUESTION_ITEM = {
+      question: question.value,
+      id: INDEX,
+      rightAnswerId: this.state.rightAnswerId,
+      answers: [
+        { text: option1.value,  id: option1.id},
+        { text: option2.value,  id: option2.id},
+        { text: option3.value,  id: option3.id},
+        { text: option4.value,  id: option4.id},
+      ]
+    }
+
+    QUIZ.push(QUESTION_ITEM);
+
+    this.setState({
+      quiz: QUIZ,
+      isFormValid: false,
+      rightAnswerId: 1,
+      formControls: createFormControls()
+    })
   }
 
-  createQuizHandler = () => {
+  createQuizHandler = (event) => {
+    event.preventDefault();
 
+    console.log(this.state.quiz);
   }
 
   changeHandler = (value, controlName) => {
+    const FORM_CONTROLS = JSON.parse(JSON.stringify(this.state.formControls));
+    const CONTROL = JSON.parse(JSON.stringify(this.state.formControls[controlName]));
 
+    CONTROL.touched = true;
+    CONTROL.value = value;
+    CONTROL.valid = validate(CONTROL.value, CONTROL.validation);
+
+    FORM_CONTROLS[controlName] = CONTROL;
+
+    this.setState({
+      formControls: FORM_CONTROLS,
+      isFormValid: validateForm(FORM_CONTROLS)
+    })
   }
 
   renderInputs() {
@@ -106,12 +147,14 @@ export default class QuizCreator extends Component {
             <Button 
               type="primary"
               onClick={this.addQuiestionHandler}
+              disabled={!this.state.isFormValid}
             >
               Добавить вопрос
             </Button>
             <Button 
               type="success"
               onClick={this.createQuizHandler}
+              disabled={this.state.quiz.length === 0}
             >
               Создать тест
             </Button>
